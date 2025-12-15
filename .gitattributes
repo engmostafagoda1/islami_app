@@ -1,7 +1,10 @@
+# فرض لغة Dart
 *.dart linguist-language=Dart
+
+# تجاهل باقي اللغات
 *.cpp linguist-detectable=false
 *.h linguist-detectable=false
 *.c linguist-detectable=false
 *.cmake linguist-detectable=false
-*.html linguist-detectable=false
 *.swift linguist-detectable=false
+*.html linguist-detectable=false
