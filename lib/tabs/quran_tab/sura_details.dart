@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:islami_app/apptheme.dart';
+import 'package:islami_app/l10n/app_localizations.dart';
 import 'package:islami_app/tabs/quran_tab/quran.dart';
+import 'package:islami_app/tabs/settings_tab/sitting_provider.dart';
+import 'package:provider/provider.dart';
 
 class SuraDetails extends StatefulWidget {
   static const String routename = 'suraDetails';
@@ -15,6 +18,7 @@ class _SuraDetailsState extends State<SuraDetails> {
   late SuraArg args;
   @override
   Widget build(BuildContext context) {
+    SettingProvider settingProvider = Provider.of<SettingProvider>(context);
     args = ModalRoute.of(context)!.settings.arguments as SuraArg;
     if (ayat.isEmpty) {
       loadsura();
@@ -22,17 +26,19 @@ class _SuraDetailsState extends State<SuraDetails> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/bg3.png'),
+          image: AssetImage(settingProvider.bgimage),
           fit: BoxFit.fill,
         ),
       ),
       child: Scaffold(
-        appBar: AppBar(title: Text('إسلامي')),
+        appBar: AppBar(title: Text(AppLocalizations.of(context)!.islami)),
         body: Container(
           margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.09),
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.035),
           decoration: BoxDecoration(
-            color: Apptheme.white.withOpacity(0.8),
+            color: settingProvider.isdark
+                ? Apptheme.darkprimary.withOpacity(0.8)
+                : Apptheme.white.withOpacity(0.8),
             borderRadius: BorderRadius.circular(25),
           ),
           child: Column(
@@ -44,21 +50,37 @@ class _SuraDetailsState extends State<SuraDetails> {
                     Expanded(
                       child: Text(
                         'سورة ${args.suraname}',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: settingProvider.isdark
+                              ? Apptheme.gold
+                              : Apptheme.blacktxt,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     CircleAvatar(
-                      backgroundColor: Apptheme.blacktxt,
+                      backgroundColor: settingProvider.isdark
+                          ? Apptheme.gold
+                          : Colors.black,
                       radius: 12,
-                      child: Icon(Icons.play_arrow, color: Apptheme.white),
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: settingProvider.isdark
+                            ? Apptheme.blacktxt
+                            : Apptheme.white,
+                      ),
                     ),
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 37),
-                child: Divider(color: Apptheme.lightprimary),
+                child: Divider(
+                  color: settingProvider.isdark
+                      ? Apptheme.gold
+                      : Apptheme.lightprimary,
+                ),
               ),
               Expanded(
                 child: ayat.isEmpty
@@ -66,13 +88,13 @@ class _SuraDetailsState extends State<SuraDetails> {
                         child: CircularProgressIndicator(color: Apptheme.gold),
                       )
                     : ListView.builder(
-                      itemBuilder: (context, index) => Text(
-                        '(${index+1})${ayat[index]}',
-                        style: Theme.of(context).textTheme.titleLarge,
-                        textAlign: TextAlign.center,
+                        itemBuilder: (context, index) => Text(
+                          '(${index + 1})${ayat[index]}',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                        itemCount: ayat.length,
                       ),
-                      itemCount: ayat.length,
-                    ),
               ),
             ],
           ),

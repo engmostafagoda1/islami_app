@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:islami_app/apptheme.dart';
+import 'package:islami_app/l10n/app_localizations.dart';
 import 'package:islami_app/tabs/hadeth_tab/hadeth.dart';
 import 'package:islami_app/tabs/hadeth_tab/hadeth_details.dart';
+import 'package:islami_app/tabs/settings_tab/sitting_provider.dart';
+import 'package:provider/provider.dart';
 
 class HadethScreen extends StatefulWidget {
   @override
@@ -14,7 +17,8 @@ class _HadethScreenState extends State<HadethScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(ahadeth.isEmpty){
+    SettingProvider settingProvider = Provider.of<SettingProvider>(context);
+    if (ahadeth.isEmpty) {
       loadhadeth();
     }
     return Column(
@@ -26,15 +30,25 @@ class _HadethScreenState extends State<HadethScreen> {
         Container(
           decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(color: Apptheme.lightprimary, width: 2),
-              bottom: BorderSide(color: Apptheme.lightprimary, width: 2),
+              top: BorderSide(
+                color: settingProvider.isdark
+                    ? Apptheme.gold
+                    : Apptheme.lightprimary,
+                width: 2,
+              ),
+              bottom: BorderSide(
+                color: settingProvider.isdark
+                    ? Apptheme.gold
+                    : Apptheme.lightprimary,
+                width: 2,
+              ),
             ),
           ),
           child: Row(
             children: [
               Expanded(
                 child: Text(
-                  'الأحاديث',
+                  AppLocalizations.of(context)!.ahadeth,
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -61,7 +75,9 @@ class _HadethScreenState extends State<HadethScreen> {
               ),
             ),
             itemCount: ahadeth.length,
-            separatorBuilder: (context, index) => Divider(),
+            separatorBuilder: (context, index) => Divider(
+              color: settingProvider.isdark ? Apptheme.gold : Apptheme.lightprimary,
+            ),
           ),
         ),
       ],

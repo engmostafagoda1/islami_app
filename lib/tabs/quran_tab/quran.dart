@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/apptheme.dart';
+import 'package:islami_app/l10n/app_localizations.dart';
 import 'package:islami_app/tabs/quran_tab/sura_details.dart';
+import 'package:islami_app/tabs/settings_tab/sitting_provider.dart';
+import 'package:provider/provider.dart';
 
 class Quran extends StatelessWidget {
   List<String> suraname = [
@@ -122,6 +125,7 @@ class Quran extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SettingProvider settingProvider = Provider.of<SettingProvider>(context);
     return Column(
       children: [
         Image.asset(
@@ -131,15 +135,23 @@ class Quran extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(color: Apptheme.lightprimary, width: 2),
-              bottom: BorderSide(color: Apptheme.lightprimary, width: 2),
+              top: BorderSide(
+                color: settingProvider.isdark
+                    ? Apptheme.gold
+                    : Apptheme.lightprimary,
+              ),
+              bottom: BorderSide(
+                color: settingProvider.isdark
+                    ? Apptheme.gold
+                    : Apptheme.lightprimary,
+              ),
             ),
           ),
           child: Row(
             children: [
               Expanded(
                 child: Text(
-                  'عدد الآيات',
+                  AppLocalizations.of(context)!.ayanun,
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -147,13 +159,15 @@ class Quran extends StatelessWidget {
               SizedBox(
                 height: 40,
                 child: VerticalDivider(
-                  color: Apptheme.lightprimary,
+                  color: settingProvider.isdark
+                      ? Apptheme.gold
+                      : Apptheme.lightprimary,
                   thickness: 3,
                 ),
               ),
               Expanded(
                 child: Text(
-                  'إسم السورة',
+                  AppLocalizations.of(context)!.suraname,
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -167,7 +181,9 @@ class Quran extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: VerticalDivider(
-                  color: Apptheme.lightprimary,
+                  color: settingProvider.isdark
+                      ? Apptheme.gold
+                      : Apptheme.lightprimary,
                   thickness: 3,
                 ),
               ),
@@ -197,7 +213,11 @@ class Quran extends StatelessWidget {
                   ),
                 ),
                 itemCount: suraname.length,
-                separatorBuilder: (context, index) => Divider(),
+                separatorBuilder: (context, index) => Divider(
+                  color: settingProvider.isdark
+                      ? Apptheme.gold
+                      : Apptheme.lightprimary,
+                ),
               ),
             ],
           ),
